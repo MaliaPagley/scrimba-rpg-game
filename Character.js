@@ -3,19 +3,16 @@ import { getDiceRollArray, getDicePlaceholderHtml, getPercentage } from './utils
 
 
 /*Function Constructor */
-function Character(data) {
-    Object.assign(this, data)
-    // Object Assign replaced the commented code below: For Reference
-        // this.elementId = data.elementId
-        // this.name = data.name
-        // this.avatar = data.avatar
-        // this.health = data.health
-        // this.diceCount = data.diceCount
-        
-    this.diceHtml = getDicePlaceholderHtml(this.diceCount) 
+class Character{
+    constructor(data) {
+        Object.assign(this, data)
+        this.diceHtml = getDicePlaceholderHtml(this.diceCount) 
+        this.maxHealth = this.health
 
+    }
+   
     // Character Constructor Method
-    this.setDiceHtml = function(diceCount) {
+    setDiceHtml() {
              /* Maps over dice rolls returned by getDiceRollArray 
              to generate the html for the random dice numbers */
         this.currentDiceScore = getDiceRollArray(this.diceCount)
@@ -23,10 +20,8 @@ function Character(data) {
           
     }
     
-    this.maxHealth = this.health
-
     // Tracks the total damage of each character per roll
-    this.takeDamage = function(attackScoreArray){  
+    takeDamage(attackScoreArray) {  
         const totalAttackScore = attackScoreArray.reduce((total, num) =>  total + num)
         this.health -= totalAttackScore
         // Checks if character's health drops to 0 and sets the status to dead if true
@@ -36,7 +31,7 @@ function Character(data) {
         }
     }
 
-    this.getHealthBarHtml = function() {
+    getHealthBarHtml() {
         const percent = getPercentage(this.health, this.maxHealth)
        return `<div class="health-bar-outer">
                  <div class="health-bar-inner ${percent < 26 ? "danger" : ""} " 
@@ -47,7 +42,7 @@ function Character(data) {
   
 
     // Character Constructor Method 
-    this.getCharacterHtml = function () {  
+    getCharacterHtml() {  
         const {elementId, name, avatar, health, diceCount, diceHtml} = this 
 
         const healthBar = this.getHealthBarHtml()
